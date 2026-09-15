@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+
+# 執行時的工作產物（跑 skill 時在本機產生，不進版控）
+旅遊圖片/
+pdf_pages/
+行程.html
+行程_files.html
+行程.pdf
+assets/ph_*.jpg
+assets/map_day*.jpg
+assets/route_*.jpg
+
+# OS
+.DS_Store
+Thumbs.db
