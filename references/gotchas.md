@@ -1,37 +1,37 @@
-# 地雷防呆（交付前逐條過）
+# Gotchas (walk through before delivering)
 
-這些都是真的踩過的坑，不是理論。跳過任何一條，成品就會在使用者面前出包。
+These are real, tested pitfalls — not theory. Skip any one and the guide breaks in front of the user.
 
-## 1. 聊天室貼的圖，讀不到檔案
-使用者把照片「貼在對話裡」時，你**沒有檔案路徑可以讀取**。
-→ 第一時間就請他把圖**存進 `旅遊圖片/` 資料夾**，用 `站號-序號`／`map_dayN`／`route_站號` 命名。別自己空轉一輪才發現拿不到圖。
+## 1. Images pasted into chat have no readable file
+When the user pastes photos into the conversation, **you have no file path to read**.
+→ Up front, have them save photos into a `photos/` folder named `stop-seq` / `map_dayN` / `route_<stop>`. Don't spin a whole round only to find you can't reach the image.
 
-## 2. 某些照片會讓 Edge 匯出 PDF 出包（被畫小、露白）
-**現象**：同一份 HTML，在真實瀏覽器（手機／電腦）完全正常，但用 Edge 無頭 `--headless --print-to-pdf` 匯出時，**某幾張照片被畫成一小塊、下方一大片白**。與欄數、格式（JPG/PNG）、尺寸、grid/flex 全無關——**只跟那個圖檔的像素資料有關**（實測：把圖檔重存一次就好了）。
-→ 對策：
-- PDF **一律用「外部圖檔版」HTML** 產生（`--files`），不要用 base64 版去印。
-- 印完**一定跑 `verify_pdf.py`** 逐頁檢查；被點名的頁，**請使用者把那張來源圖重新存一次**（另存新檔即可），重跑第 2 步。
-- 不要浪費時間改 CSS／換格式／換 headless 模式去救——那條路走不通，已驗證。
+## 2. Some image files break Edge's PDF export (photo drawn tiny, white below)
+**Symptom**: the same HTML looks perfect in a real browser (phone/desktop), but exporting with headless Edge `--headless --print-to-pdf` draws **certain photos as a small block with a big white gap below**. It is unrelated to columns, format (JPG/PNG), size, or grid/flex — it depends only on that image file's pixel data (tested: re-saving the file once fixes it).
+→ What to do:
+- Always print the PDF from the **external-image HTML** (`--files`), never the base64 version.
+- After printing, **always run `verify_pdf.py`**; for any flagged page, **ask the user to re-save that source image once** (Save As), then rerun from step 2.
+- Don't waste time changing CSS / format / headless mode to fix it — that path doesn't work, already verified.
 
-## 3. 驗證要看「真實瀏覽器」，別只信無頭截圖
-無頭瀏覽器的**全頁截圖**對大張圖會失真（超出繪圖表面上限會分帶錯亂）。
-→ 要確認版面是否真的正確，用下列之一：
-- `verify_pdf.py`（PyMuPDF 把 PDF 每頁轉成圖，這是真的分頁渲染）；
-- 或起本機 http server 用真實瀏覽器開，量 `img.getBoundingClientRect()` 的實際高度（>80px 才算填滿）。
-- 隱藏分頁量到 `window.innerWidth = 0` → 量測全 0，要先設一個視窗寬度再量。
+## 3. Verify against a real render, not a headless screenshot
+A headless **full-page screenshot** distorts large images (exceeding the max drawing surface causes banding).
+→ To confirm the layout is actually correct, use one of:
+- `verify_pdf.py` (PyMuPDF renders each PDF page to an image — a true paginated render); or
+- serve the folder over a local http server and open it in a real browser, then measure `img.getBoundingClientRect()` heights (>80px means filled).
+- A hidden browser tab measures `window.innerWidth = 0` → all sizes read 0; set a viewport width first.
 
-## 4. 並排照片要「先裁成統一比例」，別靠 object-fit
-`process_images.py` 把所有畫廊照片**中心裁成 3:2**（780×520）。網頁只用最基本的 `width:100%`，**不要用 `object-fit:cover`**（無頭匯出會出包）。同比例＋等寬＝自動等高、乾淨。
+## 4. Pre-crop side-by-side photos; don't rely on object-fit
+`process_images.py` center-crops all gallery photos to a uniform **3:2 (780×520)**. The page uses plain `width:100%`, **not `object-fit:cover`** (headless export mishandles cover). Same ratio + equal width = auto equal height, clean.
 
-## 5. 手機看到舊版＝快取；每次改版給「全新連結」
-claude.ai artifact 在手機被 service worker 快取鎖住，加 `?v=5` 這種尾巴**騙不過它**。
-→ 改版後**發布成一個全新網址**（換一個檔名發佈就是新 URL，手機從沒開過就沒有舊快取）。
-→ 長久之計：放 **GitHub Pages**（原樣顯示這份 HTML、住在使用者自己的 repo，最接近「永久連結」）。細節見使用者知識庫概念頁「永久作品連結與網頁託管方案」。
+## 5. A phone showing the old version = cache; publish a fresh link per version
+A claude.ai artifact gets locked by a service worker on mobile; appending `?v=5` **does not** beat it.
+→ After an update, publish to a **brand-new URL** (a new file name = a new URL; a phone that never opened it has no old cache).
+→ Long term: host on **GitHub Pages** (serves your HTML as-is, lives in your own repo — the closest thing to a permanent link).
 
-## 6. 兩種輸出、一份範本
-- **自包含 HTML（base64）** = 要分享的成品（單檔、傳出去一點就開）。
-- **PDF** = 校稿用（從外部圖檔版印）。
-- 兩者同一份 `template.html` ＋ `build_html.py` 出，不要各做一套。
+## 6. Two outputs, one template
+- **Self-contained HTML (base64)** = the file to share (single file, opens with one tap).
+- **PDF** = for proofing (printed from the external-image version).
+- Both come from one `template.html` + `build_html.py` — don't build two separate pipelines.
 
-## 7. 資料誠實，不要瞎編
-地址、電話、營業時間查不到就寫「請自行確認」。**捏造會害人導錯路**——這是這支 skill 最不能犯的錯。
+## 7. Be honest with data; never fabricate
+If an address / phone / hours can't be found, write "please verify". **Fabricating sends people to the wrong place** — the one thing this skill must never do.

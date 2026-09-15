@@ -1,83 +1,77 @@
-# travel-guide · 旅遊說明書生成 Skill
+# travel-guide
 
 > A Claude Code / Claude Agent **Skill** that turns a rough trip outline into a polished, shareable travel guide — a **self-contained HTML** page (images inlined, one file) plus a print-ready **A4 PDF**.
 
-把一份**粗略的旅遊行程**（日期、景點、順序），變成一份**排版精美、可對外分享**的旅遊說明書：
-一份**自包含 HTML**（單檔、圖片內嵌，傳出去一點就開）＋ 一份 **A4 PDF**（校稿用）。
+Give it dates, stops and an order; it produces a finished guide with per-stop address, phone, hours, description, photos, Google Map / parking / website buttons, an **arrive–stay–leave** timeline, drive time and which road between stops, per-day **route maps**, pre-trip **weather links** and a **packing list**.
 
-這支 Skill 是 2026-09-15 從一次真實成果（台南・嘉義兩天一夜）**反向拆解**而成，並用 [AI Skill 六條設計規律](#設計理念) 打磨。
+**Output language follows the user** — set `lang` and a `labels` object in `trip.json` (English by default; a full Traditional-Chinese override ships in `references/example-trip.zh-TW.json`).
 
----
-
-## 🎬 成品效果（Demo）
-
-**🔗 線上 demo（一點就開）：https://taishingted.github.io/travel-guide-skill/**
-
-`demo/` 放了用這支 Skill 做出來的真實成品：
-
-- 📄 [`demo/台南嘉義兩天一夜-範例成品.pdf`](demo/台南嘉義兩天一夜-範例成品.pdf) — A4 校稿版
-- 🌐 [`demo/台南嘉義兩天一夜-範例成品.html`](demo/台南嘉義兩天一夜-範例成品.html) — 自包含網頁版（單檔、可直接分享）
+Reverse-engineered on 2026-09-15 from a real deliverable (a two-day Tainan · Chiayi trip) and shaped with six skill-design rules.
 
 ---
 
-## ✨ 產出涵蓋
+## 🎬 Live demo (one tap)
 
-- **封面**：主副標、路線節點、集合／住宿／回程資訊
-- **行前提醒**：天氣連結（依縣市自動組）＋ 攜帶清單（依季節與行程性質建議）
-- **每一天**：路線地圖（含國道／縣道、經過鄉鎮）＋ 時間軸
-- **每一站**：到達–停留–離開時間、地址／電話／營業時間、景點介紹、照片、
-  **有顏色辨識的按鈕**（🗺 Google Map／🅿️ 停車場／🔗 官網）、開車路線提醒
-- **兩種輸出、一份範本**：分享用自包含 HTML ＋ 校稿用 PDF
+**➡️ https://taishingted.github.io/travel-guide-skill/**
 
-## 📦 結構
+Opens the finished guide right in the browser — nothing to download or install. The `demo/` folder also has a downloadable PDF. (The demo output is in Traditional Chinese, showing the skill handles CJK end to end.)
+
+---
+
+## ✨ What it produces
+
+- **Cover**: title/subtitle, route nodes, meet / getting-around / return chips
+- **Pre-trip panel**: weather links (built from the location) + a packing list (suggested from season & trip type)
+- **Per day**: a route map (highways/roads, areas passed) + a timeline
+- **Per stop**: arrive–stay–leave times, address / phone / hours, description, photos, **color-coded buttons** (🗺 Google Map / 🅿️ Parking / 🔗 Website), driving-route hints
+- **Two outputs, one template**: a self-contained HTML to share + a PDF to proof
+
+## 📦 Structure
 
 ```
 travel-guide/
-├── SKILL.md                  # 五步流程地圖（越短越好，細節推 references）
+├── SKILL.md                     # five-step flow (kept short; details in references/)
 ├── references/
-│   ├── data-checklist.md     # 要蒐集哪些欄位、什麼你給、什麼 AI 自己補
-│   ├── design-system.md      # 版面／配色／元件規格（照範本走）
-│   ├── gotchas.md            # 血淚防呆（見下）
-│   └── example-trip.json     # 完整範例 = 資料 schema + 測試資料
+│   ├── data-checklist.md        # fields to collect; what the user gives vs. what you fill in
+│   ├── design-system.md         # layout / colors / components (follow the template)
+│   ├── gotchas.md               # hard-won pitfalls (see below)
+│   ├── example-trip.json        # default English sample = the data schema
+│   └── example-trip.zh-TW.json  # Traditional-Chinese sample (shows lang + labels override)
 ├── scripts/
-│   ├── process_images.py     # 照片裁成統一 3:2、洗進 assets/
-│   ├── build_html.py         # 由 trip.json 組 HTML（base64 自包含 / --files 外部圖檔）
-│   ├── make_pdf.py           # 用系統 Edge/Chrome 無頭列印成 A4 PDF
-│   └── verify_pdf.py         # 逐頁轉圖 + 自動偵測「照片被畫小」的頁
+│   ├── process_images.py        # crop photos to a uniform 3:2, wash into assets/
+│   ├── build_html.py            # build HTML from trip.json (base64 self-contained / --files external)
+│   ├── make_pdf.py              # print an A4 PDF with headless Edge/Chrome
+│   └── verify_pdf.py            # render pages + auto-flag any "photo drawn too small" page
 └── assets/
-    └── template.html         # 版面骨架 + CSS
+    └── template.html            # page skeleton + CSS
 ```
 
-## 🚀 使用
+## 🚀 Usage
 
-1. 把景點照片存進 `旅遊圖片/`，用 **`站號-序號`** 命名（例：第 2 站第 1 張 = `2-1.jpg`）；
-   路線地圖 `map_day1.png`、站內路線圖 `route_<站號>.png`。
-2. 讓 Claude 依 `references/data-checklist.md` 把行程蒐集成 `trip.json`（缺的地址電話上網補，**查不到就寫「請自行確認」，絕不瞎編**）。
-3. 依序跑：
+1. Save photos into `photos/` named **`stop-seq`** (e.g. stop 2, photo 1 = `2-1.jpg`); route maps `map_day1.png`; per-stop route hints `route_<stop>.png`.
+2. Have Claude collect the trip into `trip.json` per `references/data-checklist.md` (look up missing address/phone; **if not found, write "please verify" — never fabricate**).
+3. Run:
    ```bash
-   python scripts/process_images.py 旅遊圖片 assets
-   python scripts/build_html.py trip.json assets 行程.html            # 自包含，要分享的成品
-   python scripts/build_html.py trip.json assets 行程_files.html --files  # 外部圖檔版，印 PDF 用
-   python scripts/make_pdf.py 行程_files.html 行程.pdf
-   python scripts/verify_pdf.py 行程.pdf
+   python scripts/process_images.py photos assets
+   python scripts/build_html.py trip.json assets guide.html            # self-contained = the file to share
+   python scripts/build_html.py trip.json assets guide_files.html --files   # external images = print the PDF from this
+   python scripts/make_pdf.py guide_files.html guide.pdf
+   python scripts/verify_pdf.py guide.pdf
    ```
-4. `verify_pdf.py` 若點名某頁照片被畫小 → 把那站來源圖**另存新檔重存一次**，重跑即可。
+4. If `verify_pdf.py` flags a page, ask the user to **re-save that source photo once**, then rerun.
 
-**相依**：Python 3、[Pillow](https://pypi.org/project/pillow/)、[PyMuPDF](https://pypi.org/project/PyMuPDF/)、系統的 Edge 或 Chrome（無頭列印 PDF）。
+**Requirements**: Python 3, [Pillow](https://pypi.org/project/pillow/), [PyMuPDF](https://pypi.org/project/PyMuPDF/), and system Edge or Chrome (for headless PDF printing).
 
-## 🧠 血淚防呆（`references/gotchas.md` 精華）
+## 🧠 Gotchas (highlights from `references/gotchas.md`)
 
-真的踩過、值得別人避開的坑：
+1. **Some image files break Edge's headless PDF export** — a photo is drawn tiny with a white gap below. It's unrelated to columns/format/size/CSS; it depends only on that file's pixel data — **re-saving the file once fixes it**. `verify_pdf.py` detects it via the bottom-strip background ratio (good 0.01–0.05, broken = 1.0).
+2. **Verify against a real render** (PyMuPDF per-page), not a headless full-page screenshot (large images band).
+3. **Pre-crop side-by-side photos to a uniform 3:2** + `width:100%`; don't rely on `object-fit:cover` (headless export mishandles it).
+4. **A phone showing an old version = cache** — publish a fresh URL per version, or host on GitHub Pages.
 
-1. **某些圖檔會觸發 Edge 無頭匯出 PDF 的 bug**：照片被畫在框內左上角、下面一片白。與欄數／格式／尺寸／CSS 全無關，**只跟該圖檔的像素資料有關**——把圖檔重存一次就好。
-   `verify_pdf.py` 用「圖框下緣是不是一片空白」自動偵測（正常 0.01~0.05、壞掉 = 1.0）。
-2. **驗證要看真實渲染**（PyMuPDF 逐頁轉圖），別信無頭全頁截圖（大圖會分帶失真）。
-3. **並排照片先裁成統一比例**（3:2）＋ `width:100%`，別靠 `object-fit:cover`（無頭匯出會出包）。
-4. **手機看到舊版是快取**：改版就發布**全新連結**，長久放 GitHub Pages。
+## Design philosophy
 
-## 設計理念
-
-用「AI Skill 六條設計規律」打磨：描述是誘餌（觸發準）、本文只放地圖（精簡）、確定的事交給腳本、講「為什麼」勝過用大寫壓人、會被抄的捷徑先堵、寫完一定裸跑測試。
+Shaped with six skill-design rules: description is bait (fires reliably), body is a map (short), deterministic work goes to scripts, explain *why* instead of shouting in caps, block the tempting shortcuts up front, and always dry-run test.
 
 ## License
 

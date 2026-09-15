@@ -1,6 +1,18 @@
 # Changelog
 
-本專案版本紀錄。格式參考 [Keep a Changelog](https://keepachangelog.com/)。
+All notable changes to this project. Format based on [Keep a Changelog](https://keepachangelog.com/).
+
+## [v1.1.0] - 2026-09-16
+
+### Changed
+- **Internationalized.** All docs, code comments and script output are now in English.
+- Output language is configurable via `trip.json` `lang` + `labels` (English by default).
+- Font stack and `<html lang>` generalized for Latin + CJK.
+
+### Added
+- `references/example-trip.json` — a default **English** sample (Kyoto one-day).
+- `references/example-trip.zh-TW.json` — the Tainan · Chiayi trip as a Traditional-Chinese sample (shows the `lang`/`labels` override).
+- `index.html` + GitHub Pages: a one-tap live demo at https://taishingted.github.io/travel-guide-skill/
 
 ## [v1.0.0] - 2026-09-15
 

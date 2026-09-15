@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-把來源照片整理進 assets/。
-用法: python process_images.py 旅遊圖片 assets
-命名規則(來源檔):
-  畫廊照片 = 站號-序號  例 2-1.jpg / 2-2.png  -> 裁成統一 3:2(780x520) -> assets/ph_2-1.jpg
-  地圖     = map_dayN   例 map_day1.png         -> 縮寬<=1200 保留比例   -> assets/map_day1.jpg
-  站內路線 = route_站號 例 route_8.png          -> 縮寬<=1200 保留比例   -> assets/route_8.jpg
-為什麼要先裁成 3:2: 並排照片同比例才會自動等高、乾淨，網頁不必靠 object-fit(無頭匯出會出包)。
+Prepare source photos into assets/.
+Usage: python process_images.py photos assets
+Naming (source files):
+  gallery photo = stop-seq   e.g. 2-1.jpg / 2-2.png  -> crop to uniform 3:2 (780x520) -> assets/ph_2-1.jpg
+  map           = map_dayN   e.g. map_day1.png        -> width<=1200, keep aspect      -> assets/map_day1.jpg
+  route hint    = route_stop e.g. route_8.png         -> width<=1200, keep aspect      -> assets/route_8.jpg
+Why pre-crop to 3:2: side-by-side photos with the same ratio auto-align to equal height, so the
+page can use plain width:100% and avoid object-fit (which headless PDF export mishandles).
 """
 import sys, os, re, glob
 from PIL import Image
@@ -40,18 +41,18 @@ def main():
         try:
             im = Image.open(f).convert("RGB")
         except Exception as e:
-            print("!! 跳過(讀不到):", f, e); continue
-        # 洗到全新白底畫布，去掉任何殘留屬性(避免無頭匯出出包)
+            print("!! skip (unreadable):", f, e); continue
+        # repaint onto a fresh white canvas to strip any residual metadata/quirks
         canvas = Image.new("RGB", im.size, (255, 255, 255)); canvas.paste(im, (0, 0)); im = canvas
-        if re.fullmatch(r"\d+-\d+", name):          # 畫廊照片
+        if re.fullmatch(r"\d+-\d+", name):          # gallery photo
             crop_32(im).save(os.path.join(dst, "ph_" + name + ".jpg"), quality=85)
             out = "ph_" + name + ".jpg"
-        else:                                        # 地圖 / 路線 / 其他
+        else:                                        # map / route / other
             resize_w(im).save(os.path.join(dst, name + ".jpg"), quality=88)
             out = name + ".jpg"
         n += 1
         print("  %-16s -> %s" % (os.path.basename(f), out))
-    print("完成，共處理 %d 張 -> %s" % (n, dst))
+    print("Done. Processed %d image(s) -> %s" % (n, dst))
 
 if __name__ == "__main__":
     main()

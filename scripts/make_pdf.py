@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-把 HTML 印成 A4 PDF(用系統的 Edge/Chrome 無頭列印)。
-用法: python make_pdf.py 行程_files.html 行程.pdf
-注意: 一定要用「外部圖檔版」HTML(build_html.py 加 --files 產的)來印，
-      不要用 base64 版——見 references/gotchas.md 第 2 條。
+Print an HTML file to an A4 PDF using the system's headless Edge/Chrome.
+Usage: python make_pdf.py guide_files.html guide.pdf
+Note: always print the "external-image" HTML (built with --files), NOT the base64 version.
+      See references/gotchas.md #2.
 """
 import sys, os, subprocess, shutil
 try: sys.stdout.reconfigure(encoding="utf-8")
@@ -31,16 +31,16 @@ def main():
     html_in, pdf_out = os.path.abspath(sys.argv[1]), os.path.abspath(sys.argv[2])
     br = find_browser()
     if not br:
-        print("找不到 Edge/Chrome，請改用瀏覽器開 HTML → 列印 → 另存 PDF"); sys.exit(1)
+        print("No Edge/Chrome found. Open the HTML in a browser and use Print -> Save as PDF."); sys.exit(1)
     url = "file:///" + html_in.replace("\\", "/")
     cmd = [br, "--headless=new", "--disable-gpu", "--no-pdf-header-footer",
            "--virtual-time-budget=8000", "--print-to-pdf=" + pdf_out, url]
     subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     if os.path.exists(pdf_out):
         print("OK -> %s (%.1f KB)" % (pdf_out, os.path.getsize(pdf_out) / 1024))
-        print("下一步: python verify_pdf.py \"%s\"" % pdf_out)
+        print("Next: python verify_pdf.py \"%s\"" % pdf_out)
     else:
-        print("印失敗，請改用瀏覽器列印另存 PDF")
+        print("Print failed. Open the HTML in a browser and use Print -> Save as PDF.")
 
 if __name__ == "__main__":
     main()

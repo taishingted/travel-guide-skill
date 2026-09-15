@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-驗證 PDF: 把每頁轉成圖(給 Claude 眼睛看)，並自動點名「照片被畫小」的頁。
-用法: python verify_pdf.py 行程.pdf [pdf_pages]
+Verify a PDF: render each page to an image (for a human/Claude to eyeball) and auto-flag pages
+where a photo rendered too small.
+Usage: python verify_pdf.py guide.pdf [pdf_pages]
 
-偵測原理(重要): 無頭匯出對某些圖檔會把照片畫在框內左上角、下面留一大片白(見 gotchas 第 2 條)。
-  圖片「框」的尺寸好壞一樣，所以不能用框大小判斷；要看「框內下緣是不是一片空白」。
-  實測: 正常照片下緣空白比例 0.01~0.05，被畫小的 = 1.0。門檻取 0.85。
-被點名的頁 -> Claude 打開該頁 PNG 確認; 若真的縮了 -> 請使用者把那站來源圖『另存新檔』重存一次再重跑。
+Detection (important): headless export sometimes draws certain photos in the top-left of their box
+with a big white gap below (see gotchas.md #2). The image *box* size is identical whether good or
+broken, so box size can't tell them apart — instead check whether the bottom strip of the box is
+nearly all background. Measured: good photo bottom-strip background ratio 0.01-0.05, broken = 1.0.
+Threshold = 0.85.
+A flagged page -> open its PNG to confirm; if it really shrank -> ask the user to re-save that
+source photo once (Save As) and rerun process_images / build_html / make_pdf.
 """
 import sys, os
 import pymupdf
@@ -20,7 +24,7 @@ except Exception:
     HAVE_PIL = False
 
 ZOOM = 2.0
-BG = (252, 250, 244)  # 近白/米色底
+BG = (252, 250, 244)  # near white / cream ground
 
 def near_bg_ratio(im, box):
     data = im.crop(box).resize((40, 10)).convert("RGB").tobytes()
@@ -49,20 +53,20 @@ def main():
             x0, y0, x1, y1 = [v * ZOOM for v in info["bbox"]]
             w, h = x1 - x0, y1 - y0
             ar = w / max(h, 1)
-            if not (1.2 < ar < 1.8 and 120 < w / ZOOM < 340):   # 只看畫廊照片(排除地圖/路線圖)
+            if not (1.2 < ar < 1.8 and 120 < w / ZOOM < 340):   # gallery photos only (skip maps/route images)
                 continue
             if near_bg_ratio(im, (int(x0), int(y1 - h * 0.22), int(x1), int(y1))) > 0.85:
                 bad.append(i + 1)
                 break
-    print("已輸出每頁圖 -> %s/page_XX.png (共 %d 頁)" % (out, d.page_count))
+    print("Rendered pages -> %s/page_XX.png (%d pages)" % (out, d.page_count))
     if not HAVE_PIL:
-        print("(未安裝 Pillow，略過自動偵測；請打開含照片的頁 PNG 人工確認)")
+        print("(Pillow not installed; skipped auto-detection. Open pages with photos to check by eye.)")
     elif bad:
-        print("\n[!] 偵測到照片被畫小的頁：第 " + "、".join(map(str, bad)) + " 頁")
-        print("    -> 打開該頁 PNG 確認；確認縮了就請使用者把那站來源照片『另存新檔』重存一次，")
-        print("       再重跑 process_images / build_html / make_pdf。")
+        print("\n[!] Photos look shrunk on page(s): " + ", ".join(map(str, bad)))
+        print("    -> Open that page PNG to confirm; if shrunk, ask the user to re-save that stop's")
+        print("       source photo once (Save As), then rerun process_images / build_html / make_pdf.")
     else:
-        print("\n[OK] 未偵測到被畫小的照片。仍建議打開一兩張含照片的頁 PNG 最後確認。")
+        print("\n[OK] No shrunk photos detected. Still worth eyeballing a page or two with photos.")
 
 if __name__ == "__main__":
     main()

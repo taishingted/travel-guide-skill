@@ -1,29 +1,32 @@
-# 版面設計系統（品味型：照範本走，別自由發揮）
+# Design system (taste-type: follow the template, don't freestyle)
 
-完整 CSS 在 `assets/template.html` 的 `<style>`。`build_html.py` 產出的 HTML 只用這些既有 class。**不要新增配色或改版型**——要調整先問使用者。
+The full CSS lives in `assets/template.html` (`<style>`). `build_html.py` only emits these existing classes. **Don't invent colors or change the layout** — ask the user first if a change is needed.
 
-## 角色定位
-一份「給同行旅客／長輩看的旅遊說明書」：溫暖、清楚、資訊密度高但不擁擠。字要大（長輩手機也看得清）、按鈕要有顏色辨識度、照片要乾淨等高。
+## Role
+A travel guide for fellow travelers (and older relatives): warm, clear, information-dense but not cramped. Big text (readable on a phone), color-coded buttons, clean equal-height photos.
 
-## 配色（暖色系，取自檜木綠＋蓮花粉＋夕陽橘）
-- 主綠 `--green #2f5d50`；第二天換檜木棕（`.day2`）做視覺分段
-- 底 `--cream #faf6ee`；卡片白；文字 `--ink #332f29`
-- 按鈕：**地圖=藍 `#2f6fb3`**、**官網/介紹=綠 `#2f7d5f`**、**停車場=橘 `#d1791f`**（顏色本身就是辨識）
-- 提醒框 `.roadnote`＝橘底左邊界；「不要走」用紅 `.no`
+## Palette (warm: cypress green + lotus pink + sunset orange)
+- Primary green `--green #2f5d50`; from day 2, switch to cypress brown (`.day2`) to separate days
+- Ground `--cream #faf6ee`; white cards; text `--ink #332f29`
+- Buttons: **Map = blue `#2f6fb3`**, **Website/info = green `#2f7d5f`**, **Parking = orange `#d1791f`** (color itself is the signal)
+- Caution box `.roadnote` = orange with a left border; "don't go…" text uses red `.no`
 
-## 版面元件（build_html 會生成這些）
-1. `.cover`：漸層封面（主副標、路線節點、2–3 資訊塊）
-2. `.panel` 行前提醒：左天氣鈕（台南藍/嘉義綠 `.wbtn.c2`）＋右攜帶清單 `.wlist`
-3. 每天：`.dayhead`（大字 Day N）→ `.mapfig`（路線地圖＋圖說）→ `.timeline`
-4. `.timeline` 內交錯：`.leg`（🚗 交通時間＋走哪條路）與 `.stop`（景點卡）
-5. `.stop`：左 `.timecol`（到達大字／停留膠囊／出發）＋右 `.body`（名稱＋類別 tag＋鄉鎮、`.info` 地址電話時間、`.desc` 介紹、`.subspot` 子點、`.pill-links` 按鈕＋`.warn`）＋下 `.gallery`（照片，單張加 `.solo`）＋選配 `.routewrap`（路線提醒＋圖）
-6. `.backup` 備案、`.footer` 頁尾
+## Components (build_html emits these)
+1. `.cover`: gradient cover (title/subtitle, route nodes, 2–3 info chips)
+2. `.panel` pre-trip: left = weather buttons (`.wbtn`, second one `.wbtn.c2` a different hue) + right = packing list `.wlist`
+3. Per day: `.dayhead` (big "Day N") → `.mapfig` (route map + caption) → `.timeline`
+4. Inside `.timeline`, alternating: `.leg` (🚗 drive time + which road) and `.stop` (stop card)
+5. `.stop`: left `.timecol` (big arrival time / stay pill / leave) + right `.body` (name + category tag + zone, `.info` address/phone/hours, `.desc`, `.subspot` sub-points, `.pill-links` buttons + `.warn`) + below `.gallery` (photos; add `.solo` for a single photo) + optional `.routewrap` (route hint + image)
+6. `.backup` fallback, `.footer`
 
-## 字級（已為長輩放大，勿再縮小）
-內文 16px、站名 23px、到達時間 27px、按鈕 15.5px、body 17.5px。
+## Type scale (already enlarged for readability — don't shrink)
+body 17.5px, stop name 23px, arrival time 27px, buttons 15.5px, body text 16px.
 
-## 列印
-`@media print` 已設 A4、第二天換頁、卡片不跨頁。字級略縮到 14px。
+## Print
+`@media print` sets A4, a page break before each later day (`.day-break`), and keeps cards from splitting. Text drops to ~14px.
 
-## 響應式
-≤560px 時 `.timecol` 轉成頂部橫列——手機一樣好看。
+## Fonts / i18n
+Font stack covers Latin + CJK (Noto Sans/Serif + Noto Sans/Serif TC + system fallbacks). `<html lang>` comes from `trip.json` `lang`. UI strings come from `labels` (English defaults).
+
+## Responsive
+At ≤560px the `.timecol` becomes a top row — still clean on a phone.
