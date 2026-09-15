@@ -11,6 +11,8 @@
 
 ## 🎬 成品效果（Demo）
 
+**🔗 線上 demo（一點就開）：https://taishingted.github.io/travel-guide-skill/**
+
 `demo/` 放了用這支 Skill 做出來的真實成品：
 
 - 📄 [`demo/台南嘉義兩天一夜-範例成品.pdf`](demo/台南嘉義兩天一夜-範例成品.pdf) — A4 校稿版
