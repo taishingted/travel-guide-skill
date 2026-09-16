@@ -54,9 +54,17 @@ python scripts/verify_pdf.py guide.pdf
 ```
 If `verify_pdf.py` flags a page, see `references/gotchas.md` #2: ask the user to re-save that one image, then redo step 2.
 
-## 5. Deliver
-Hand over the **self-contained HTML** and explain how to share it (`gotchas.md` #5). Walk through
-`references/gotchas.md` once before delivering.
+## 5. Deliver — give a LINK they can share, not just a file
+A bare `.html` file card has no Share button and is awkward to forward — a "the file looks fine but I
+can't share it" complaint means you stopped one step short. Publishing beats handing over a file. In
+order of preference:
+1. **If you can publish a hosted page / Artifact** (e.g. the Claude Artifact tool): publish the
+   **self-contained** `guide.html` and give the user its **share link** — it opens on any phone with one
+   tap and forwards cleanly (LINE/WhatsApp). Re-publish to the **same URL** on later edits so the link
+   the user already sent keeps working (mobile-cache caveat: `gotchas.md` #5).
+2. **Otherwise** hand over the self-contained HTML file, and point them at GitHub Pages / a hosted option
+   for a real shareable link (`gotchas.md` #5).
+Always also give the **PDF** for printing/offline. Walk through `references/gotchas.md` once before delivering.
 
 ## Follow the design system, and always test
 Layout/colors/components are fixed in `references/design-system.md` (CSS in `assets/template.html`) — don't

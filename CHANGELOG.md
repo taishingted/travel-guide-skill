@@ -2,6 +2,17 @@
 
 All notable changes to this project. Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [v2.3.0] - 2026-09-16
+
+**Deliver a shareable link, not just a file.**
+
+### Changed
+- **Step 5 (Deliver) now says: publish the self-contained HTML as a hosted page / Artifact and give the
+  user its share link**, instead of only handing over the `.html` file. A bare file card has no Share
+  button and is awkward to forward; this closes a real "the guide looks fine but I can't share it" gap.
+  Falls back to handing over the file + GitHub Pages guidance when publishing isn't available. PDF still
+  provided for print/offline.
+
 ## [v2.2.0] - 2026-09-16
 
 **Portable & self-healing** — runs on a fresh machine without dying.
