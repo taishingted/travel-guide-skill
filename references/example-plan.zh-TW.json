@@ -1,0 +1,68 @@
+{
+  "lang": "zh-Hant",
+  "labels": {
+    "preflight_title": "行前提醒　天氣 &amp; 攜帶工具",
+    "weather_col": "出發前先看天氣",
+    "packing_col": "建議攜帶",
+    "weather_small": "點我看一週預報",
+    "depart": "出發",
+    "route_link": "🗺 在 Google Maps 開啟本日路線"
+  },
+  "title": "三義・台中　長輩慢遊一日",
+  "subtitle": "無障礙好走 × 蔬食養生 × 室內看展 — 平順不趕的順路一日",
+  "eyebrow": "TAIPEI &rarr; SANYI &rarr; TAICHUNG · 1 DAY",
+  "counties": ["苗栗", "台中"],
+  "route_summary": ["台北出發", "三義木雕博物館", "卓也小屋 午餐", "台中國家歌劇院", "台中西區"],
+  "cover_meta": [
+    {"b": "日期", "text": "一日遊 · 08:00 台北出發"},
+    {"b": "同行", "text": "4 位大人（含 70 歲長輩，需平坦好走）"},
+    {"b": "步調", "text": "單趟車程短、景點平緩、午餐好停留"}
+  ],
+  "weather": [
+    {"label": "苗栗 天氣", "url": "https://www.google.com/search?q=苗栗三義+一週天氣預報"},
+    {"label": "台中 天氣", "url": "https://www.google.com/search?q=台中市+一週天氣預報", "c2": true}
+  ],
+  "weather_note": "10 月早晚溫差大、日間舒適，帶件薄外套；山區午後偶有短暫陣雨，備把折傘。",
+  "packing": [
+    "好走的鞋（走平面步道即可，避免長時間站立）",
+    "薄外套（早晚與室內冷氣溫差）",
+    "帽子・水壺・常備藥・健保卡",
+    "折傘 / 輕便雨衣（山區午後陣雨）",
+    "現金零錢（停車、園區折抵）"
+  ],
+  "days": [
+    {
+      "no": 1, "date": "一日遊", "flow": "台北 → 三義 → 台中", "range": "苗栗三義 → 台中西區", "theme": "green",
+      "map": {
+        "link": "https://www.google.com/maps/dir/?api=1&origin=台北車站&destination=臺中國家歌劇院&waypoints=三義木雕博物館|卓也小屋&travelmode=driving",
+        "caption": "<b>本日路線（單向不折返）</b>：台北 → 國道1／國道3 南下 → 三義 → 台中西區。全程順著高速公路一路向南，回程再由台中上國道北返。點按鈕可直接在 Google Maps 開啟導航路線。"
+      },
+      "backup": "🅿️ <b>備案</b>：若長輩想多休息，午餐後可改去 <b>台中中央書局／勤美綠園道</b>（皆平面、好停車），把歌劇院留到下次。",
+      "items": [
+        {"type": "stop", "lbl": "出發", "arr": "08:00", "name": "台北出發", "tag": {"cls": "trans", "text": "交通・集合"}, "zone": "台北",
+          "info": [{"i": "🚗", "text": "會合後上國道南下；車程較長，中途可停休息站"}],
+          "links": [{"text": "🗺 Google Map", "url": "https://www.google.com/maps/search/?api=1&query=台北車站"}]},
+        {"type": "leg", "time": "約 1 小時 40 分", "road": "國道1 → 國道3 南下（中途可停西湖服務區上廁所、伸展）"},
+        {"type": "stop", "lbl": "到達", "arr": "09:50", "stay": "停留 1.5 小時", "dep": "11:20", "name": "三義木雕博物館", "tag": {"cls": "spot", "text": "文化景點・無障礙"}, "zone": "三義鄉",
+          "info": [{"i": "📍", "text": "367 苗栗縣三義鄉廣盛村廣聲新城88號"}, {"i": "☎", "text": "037-876009"}, {"i": "🕘", "text": "09:00–17:00（16:30 停止入館・週一休）"}],
+          "desc": "全台唯一以木雕為主題的公立博物館，<b>室內平面看展、動線便於輪椅與手推車、設無障礙廁所與停車場</b>，對長輩最友善。慢慢看不趕、冷氣舒適。",
+          "links": [{"text": "🗺 Google Map", "url": "https://www.google.com/maps/search/?api=1&query=三義木雕博物館"}, {"cls": "park", "text": "🅿️ 停車場", "url": "https://www.google.com/maps/search/?api=1&query=三義木雕博物館+停車場"}, {"cls": "ghost", "text": "🔗 官方網站", "url": "https://wood.mlc.gov.tw/"}]},
+        {"type": "leg", "time": "約 10 分", "road": "台13 → 鄉道往雙潭"},
+        {"type": "stop", "lbl": "午餐到達", "arr": "11:30", "stay": "停留 1.5 小時", "dep": "13:00", "name": "卓也小屋", "tag": {"cls": "food", "text": "午餐・蔬食園區"}, "zone": "三義鄉",
+          "info": [{"i": "📍", "text": "苗栗縣三義鄉雙潭村崩山下1-5號（餐廳 1-9號）"}, {"i": "☎", "text": "03-787-9198"}, {"i": "🕘", "text": "園區 09:00–17:30；蔬食午餐約 11:00–14:00"}],
+          "desc": "山林間的蔬食園區，<b>創意蔬食自助饗宴／養生鍋</b>，園區步道平緩、綠意舒服，適合長輩飯後散步。入園票約 200 元可折抵消費。建議先訂位。",
+          "links": [{"text": "🗺 Google Map", "url": "https://www.google.com/maps/search/?api=1&query=卓也小屋+三義"}, {"cls": "ghost", "text": "🔗 官方網站", "url": "https://www.joye.com.tw/"}]},
+        {"type": "leg", "time": "約 40 分", "road": "國道1 南下 → 台中西屯"},
+        {"type": "stop", "lbl": "到達", "arr": "13:40", "stay": "停留 2 小時", "dep": "15:40", "name": "臺中國家歌劇院", "tag": {"cls": "spot", "text": "建築・室內平面"}, "zone": "台中・西屯",
+          "info": [{"i": "📍", "text": "臺中市西屯區惠來路二段101號"}, {"i": "☎", "text": "04-2251-5041"}, {"i": "🕘", "text": "11:30–21:00（週一休）"}],
+          "desc": "伊東豊雄設計的「美聲涵洞」曲牆建築，<b>室內平面、有電梯、冷氣舒適</b>，長輩可慢逛書店、餐飲與展覽。B1 停車場含 6 席無障礙車位，持票觀眾 5 小時 100 元。",
+          "links": [{"text": "🗺 Google Map", "url": "https://www.google.com/maps/search/?api=1&query=臺中國家歌劇院"}, {"cls": "park", "text": "🅿️ 停車場", "url": "https://www.google.com/maps/search/?api=1&query=臺中國家歌劇院+停車場"}, {"cls": "ghost", "text": "🔗 官方網站", "url": "https://www.npac-ntt.org/"}]},
+        {"type": "leg", "time": "回程", "road": "台中西區 → 國道1 北返台北"},
+        {"type": "stop", "lbl": "賦歸", "arr": "15:40", "stay": "回程", "name": "台中西區・賦歸", "tag": {"cls": "trans", "text": "交通・賦歸"}, "zone": "台中・西區",
+          "info": [{"i": "🚗", "text": "避開下班尖峰，早些上國道北返較順"}],
+          "links": []}
+      ]
+    }
+  ],
+  "footer": "行程時間為預估，實際依當日交通與長輩體力彈性調整；營業時間與訂位請出發前再次確認。"
+}

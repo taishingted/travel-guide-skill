@@ -23,6 +23,7 @@ DEFAULT_LABELS = {
     "packing_col": "What to pack",
     "weather_small": "Tap for the forecast",
     "depart": "Leave",
+    "route_link": "🗺 Open the day's route in Google Maps",
     "footer": "Times are estimates &mdash; adjust on the day for traffic and conditions. Please re-check opening hours before you go.",
 }
 
@@ -159,8 +160,17 @@ class Builder:
         mp = ""
         if d.get("map"):
             m = d["map"]
-            mp = ('<figure class="mapfig"><img src="%s" alt="route map"><figcaption>%s</figcaption></figure>'
-                  % (self.img_src(m.get("img", "")), m.get("caption", "")))
+            inner = ""
+            if m.get("img"):
+                src = self.img_src(m["img"])
+                if src:
+                    inner = '<img src="%s" alt="route map">' % src
+            if not inner and m.get("link"):   # V2: no drawn map, just a Google Maps directions link
+                inner = ('<div class="pill-links"><a href="%s" target="_blank">%s</a></div>'
+                         % (esc(m["link"]), esc(self.L["route_link"])))
+            cap = ('<figcaption>%s</figcaption>' % m["caption"]) if m.get("caption") else ""
+            if inner or cap:
+                mp = '<figure class="mapfig">%s%s</figure>' % (inner, cap)
         items = "".join(self.leg(it) if it.get("type") == "leg" else self.stop(it)
                         for it in d.get("items", []))
         backup = ('<div class="backup">%s</div>' % d["backup"]) if d.get("backup") else ""

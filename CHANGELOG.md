@@ -2,6 +2,26 @@
 
 All notable changes to this project. Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [v2.0.0] - 2026-09-16
+
+**V2 — plan from 3 inputs.** The skill can now plan the trip, not just format it.
+
+### Added
+- **PLAN mode**: from just **dates + start→end range + party/personas**, the agent plans a **one-way,
+  persona-fit** itinerary, **web-verifies every fact**, shows a **draft to confirm**, then builds.
+- `references/planning.md` — the planning brain: persona-fit rules, one-way routing & pacing, the
+  confirmation checkpoint, photo/route strategy for AI-chosen stops, and an anti-fabrication table.
+- `references/example-plan.zh-TW.json` — a persona-planned sample (elderly-friendly Taipei→Sanyi→Taichung).
+- Day route can now be a **Google Maps directions link** (`map.link`) when no drawn map exists —
+  `build_html.py` renders a route button.
+- **Global support** documented: maps worldwide except China (use Amap/Baidu there); weather localized to
+  the destination country; descriptions from local-language sources; local road vocabulary; font/RTL notes
+  for non-Latin scripts.
+
+### Design decision
+- The **planner is the agent itself + web search — no external model, no API key**. A one-shot small-model
+  call can't look anything up and would fabricate addresses, which this skill must never do.
+
 ## [v1.1.0] - 2026-09-16
 
 ### Changed

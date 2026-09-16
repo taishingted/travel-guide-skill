@@ -1,49 +1,57 @@
 ---
 name: travel-guide
-description: Turn a rough trip outline (dates, stops, order) into a polished, shareable travel guide — a self-contained HTML page (images inlined, one file) plus a print-ready A4 PDF. Covers, per stop, the address, phone, opening hours, official site, photos, description, Google Map and parking links; an arrive–stay–leave timeline; drive time and which road between stops; per-day route maps; pre-trip weather links and a packing list. Output language follows the user (set trip.json "lang"/"labels"). Use this whenever the user asks to "make a travel itinerary / trip guide / travel brochure / trip plan", "turn this rough plan into something nice for fellow travelers", "生成旅遊說明書 / 旅遊手冊 / 行程表 / 把行程排漂亮的 / 給旅伴看的手冊", or hands over a draft itinerary to polish into a finished deliverable.
+description: Plan and produce a polished, shareable travel guide — a self-contained HTML page (images inlined) plus a print-ready A4 PDF. Two ways in. (1) PLAN IT: the user gives only dates, a start→end area, and party/personas (e.g. "elderly, step-free only" or "kids who love animals"); you plan a one-way, persona-fit itinerary, verify the facts, and build it. (2) POLISH IT: the user already has the stops/times and just wants it made nice. Either way it covers per stop the address, phone, hours, site, photos, description, Google Map and parking links; an arrive–stay–leave timeline; drive time and roads between stops; per-day route; weather links and a packing list. Output language follows the user. Use whenever the user says "plan me a trip / make a travel itinerary / trip guide / travel brochure", "just give you dates + area + who's going and you plan the route", "幫我規劃行程 / 排一趟旅遊 / 生成旅遊說明書 / 旅遊手冊 / 給旅伴看的行程 / 我只給日期地點人數幫我安排順路行程", or hands over a rough or detailed itinerary to turn into a finished deliverable.
 ---
 
 # travel-guide
 
-Turn a rough itinerary into a polished, information-rich, **shareable** travel guide:
-a **self-contained HTML** file (single file, images inlined — opens with one tap) **plus** an **A4 PDF** for proofing.
+Produce a polished, information-rich, **shareable** travel guide: a **self-contained HTML** file (opens
+with one tap) **plus** an **A4 PDF** for proofing. Reply in the user's language, plain words, semi-automatic
+(show a short plan first, then build).
 
-> Reply to the user in their own language. Explain steps in plain words (say which button / which file), not paths or jargon. Work semi-automatically: show a short plan first, then build.
+## Which door? (pick at the start)
 
-## Five-step flow (in order; a "state" decides when a step is done)
+- **The user gave only rough inputs** — dates, a start→end area, and who's going → **PLAN mode**: do step 0
+  first (`references/planning.md`), get their OK, then continue.
+- **The user already listed stops & times** → skip step 0, go straight to step 1 (this is V1 behavior).
 
-### 1. Gather trip data → write `trip.json`
-Collect every field per `references/data-checklist.md`. Two kinds:
-- **User must supply**: dates/day count, meet & return, each stop's name/area/category/order, arrive–stay–leave, drive time + which road between stops, **the photo files**, and per-county route-map base images.
-- **You fill in**: address / phone / hours / description (look them up on the web; **if not found, write "please verify" — never fabricate**), Google Map links (build from the place name), weather links (from the county), packing list (suggest from season & trip type).
-Set `"lang"` and, for non-English output, a `"labels"` object (see `references/example-trip.zh-TW.json`).
+## 0. PLAN from 3 inputs (only in PLAN mode) — read `references/planning.md`
+From **dates + start→end range + party/personas**, *you* plan a **one-way, persona-fit** itinerary and
+**verify every fact with web search** (you are the planner — not an external model). Then **show a short
+plain-text draft and get the user's confirmation/tweaks BEFORE building**. Never fabricate: if an address /
+phone / hours can't be confirmed, write "please verify".
 
-### 2. Collect photos → run `scripts/process_images.py`
-**Images pasted into chat have no file path you can read** — ask the user up front to save photos into a `photos/` folder named **`stop-seq`** (e.g. stop 2 photo 1 = `2-1.jpg`); route maps `map_day1.png`; a per-stop route-hint image `route_<stop>.png`.
+## 1. Gather into `trip.json` — see `references/data-checklist.md`
+Fill the schema (see `references/example-trip.json`, and `references/example-trip.zh-TW.json` for a localized
+one). Set `lang` + `labels` for the output language. In PLAN mode this is the confirmed plan expanded into
+full detail; in POLISH mode it's the user's given stops plus the facts you look up.
+
+## 2. Photos → `scripts/process_images.py`
+Pasted-in-chat images can't be read — have the user save photos into `photos/` named **`stop-seq`**
+(`2-1.jpg`), maps `map_dayN.png`, route hints `route_<stop>.png`. In PLAN mode the stops are AI-chosen, so
+either build a first draft **without photos** (galleries are optional) or collect them **after** the plan is
+confirmed.
 ```
 python scripts/process_images.py photos assets
 ```
-(Gallery photos are auto-cropped to a uniform 3:2; maps keep their aspect.)
 
-### 3. Build HTML → run `scripts/build_html.py`
+## 3. Build HTML → `scripts/build_html.py`
 ```
 python scripts/build_html.py trip.json assets guide.html            # self-contained (base64) = the file to share
-python scripts/build_html.py trip.json assets guide_files.html --files   # external images = use THIS to print the PDF
+python scripts/build_html.py trip.json assets guide_files.html --files   # external images = print the PDF from THIS
 ```
 
-### 4. Make PDF + verify → `make_pdf.py` then `verify_pdf.py`
+## 4. PDF + verify → `make_pdf.py` then `verify_pdf.py`
 ```
 python scripts/make_pdf.py guide_files.html guide.pdf
 python scripts/verify_pdf.py guide.pdf
 ```
-`verify_pdf.py` flags any page where a photo rendered too small. **If flagged → see `references/gotchas.md` #2: ask the user to re-save that one image**, then redo step 2.
+If `verify_pdf.py` flags a page, see `references/gotchas.md` #2: ask the user to re-save that one image, then redo step 2.
 
-### 5. Deliver
-- Hand over the **self-contained HTML** as the deliverable and explain how to share it (see `gotchas.md` #5: mobile cache / publish a fresh link each version / GitHub Pages).
-- Before delivering, walk through `references/gotchas.md` once.
+## 5. Deliver
+Hand over the **self-contained HTML** and explain how to share it (`gotchas.md` #5). Walk through
+`references/gotchas.md` once before delivering.
 
-## Follow the design system — don't freestyle
-Layout, colors, cards, buttons and the timeline are specified in `references/design-system.md` (CSS lives in `assets/template.html`). This is a taste-type rule: follow the template; don't change colors or layout.
-
-## Always test at the end
-Run one real trip end to end, see where it breaks, then fix the files.
+## Follow the design system, and always test
+Layout/colors/components are fixed in `references/design-system.md` (CSS in `assets/template.html`) — don't
+freestyle. Run one real case end to end before saying it's done.

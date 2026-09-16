@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>三義・台中　長輩慢遊一日</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700;900&family=Noto+Serif:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green:#2f5d50; --green-d:#234a40; --green-l:#e8f0ec;
+    --terra:#c25e3f; --terra-l:#f7e7df;
+    --gold:#c99a3f; --gold-l:#f6ecd6;
+    --rose:#c56b7e; --rose-l:#f6e6ea;
+    --ink:#332f29; --muted:#7c746a; --line:#e6ddcf;
+    --cream:#faf6ee; --card:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
+  body{
+    margin:0; background:var(--cream); color:var(--ink);
+    font-family:"Noto Sans","Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif;
+    font-size:17.5px; line-height:1.78;
+  }
+  .wrap{max-width:820px; margin:0 auto; padding:26px 22px 60px;}
+  h1,h2,h3,.serif{font-family:"Noto Serif","Noto Serif TC","Microsoft JhengHei","Georgia",serif;}
+  a{color:var(--green); text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  /* ---------- Cover ---------- */
+  .cover{
+    position:relative; border-radius:22px; overflow:hidden; color:#fff;
+    background:
+      radial-gradient(120% 140% at 85% 0%, rgba(201,154,63,.55), transparent 55%),
+      radial-gradient(120% 130% at 0% 100%, rgba(197,107,126,.5), transparent 55%),
+      linear-gradient(135deg,#2f5d50,#234a40 70%);
+    padding:40px 36px 34px;
+    box-shadow:0 18px 40px -22px rgba(35,74,64,.7);
+  }
+  .cover .eyebrow{letter-spacing:.32em; font-size:12.5px; opacity:.85; font-weight:700;}
+  .cover h1{margin:.28em 0 .12em; font-size:44px; font-weight:900; letter-spacing:.03em; line-height:1.15;}
+  .cover .sub{font-size:16px; opacity:.95; font-weight:500;}
+  .cover .route{
+    margin-top:20px; display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+    font-size:13.5px;
+  }
+  .cover .route .node{background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.28);
+    padding:4px 11px; border-radius:20px; white-space:nowrap;}
+  .cover .route .arw{opacity:.7;}
+  .cover .meta{
+    margin-top:22px; display:flex; flex-wrap:wrap; gap:10px;
+  }
+  .cover .meta .chip{
+    background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25);
+    border-radius:12px; padding:9px 14px; font-size:13px; line-height:1.4;
+  }
+  .cover .meta .chip b{display:block; font-size:15px; font-weight:800; letter-spacing:.02em;}
+
+  /* ---------- generic card ---------- */
+  .panel{
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:20px 22px; margin-top:22px; box-shadow:0 8px 22px -18px rgba(51,47,41,.4);
+  }
+  .panel h2{margin:0 0 14px; font-size:23px; color:var(--green-d); display:flex; align-items:center; gap:9px;}
+  .panel h2 .ic{font-size:23px;}
+
+  .two{display:flex; gap:26px; flex-wrap:wrap;}
+  .two > div{flex:1 1 300px; min-width:250px;}
+
+  .wlist{list-style:none; margin:0; padding:0;}
+  .wlist li{padding:5px 0 5px 26px; position:relative; border-bottom:1px dashed var(--line);}
+  .wlist li:last-child{border-bottom:none;}
+  .wlist li:before{content:"✓"; position:absolute; left:2px; top:5px; color:var(--terra); font-weight:800;}
+
+  .weatherbtns{display:flex; gap:12px; flex-wrap:wrap; margin-top:4px;}
+  .wbtn{flex:1 1 150px; display:block; text-align:center; padding:16px 12px; border-radius:14px;
+    background:#2f6fb3; border:1px solid #285f9c; color:#fff; font-weight:800; font-size:19px;}
+  .wbtn.c2{background:#5a9a4a; border-color:#4c8540;}
+  .wbtn small{display:block; font-weight:600; color:#eaf3ff; font-size:14px; margin-top:3px;}
+  .wbtn.c2 small{color:#eef7ea;}
+  .note{font-size:14px; color:var(--muted); margin-top:10px;}
+
+  /* ---------- Day header ---------- */
+  .dayhead{
+    margin-top:34px; border-radius:16px; overflow:hidden;
+    background:linear-gradient(135deg,var(--green),var(--green-d)); color:#fff;
+    padding:18px 22px; display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;
+  }
+  .dayhead .d{font-family:"Noto Serif TC",serif; font-size:34px; font-weight:900; letter-spacing:.04em;}
+  .dayhead .dt{font-size:18px; font-weight:700;}
+  .dayhead .rt{margin-left:auto; font-size:14.5px; opacity:.9;}
+  .day2 .dayhead{background:linear-gradient(135deg,#8a5a34,#6f4526);}
+
+  .mapfig{margin-top:16px; background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:14px; box-shadow:0 8px 22px -18px rgba(51,47,41,.4);}
+  .mapfig img{width:100%; display:block; border-radius:10px;}
+  .mapfig figcaption{font-size:14.5px; color:var(--muted); margin-top:10px; line-height:1.65;}
+  .mapfig figcaption b{color:var(--green-d);}
+
+  /* ---------- Timeline / stop ---------- */
+  .timeline{margin-top:8px;}
+  .leg{display:flex; align-items:center; gap:10px; color:var(--muted); font-size:14.5px;
+    padding:10px 0 10px 4px; font-weight:600;}
+  .leg .car{background:var(--gold-l); color:#8a6a1f; border:1px solid #e6d3a0;
+    border-radius:20px; padding:5px 13px; white-space:nowrap;}
+  .leg .rd{color:#8a6a1f;}
+  .leg .hr{flex:1; height:1px; background:repeating-linear-gradient(90deg,var(--line) 0 6px,transparent 6px 12px);}
+
+  .stop{
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    overflow:hidden; box-shadow:0 8px 22px -18px rgba(51,47,41,.45);
+    break-inside:avoid; page-break-inside:avoid;
+  }
+  .stop .top{display:flex; gap:0; flex-wrap:wrap;}
+  .stop .timecol{
+    flex:0 0 108px; background:var(--green-l); border-right:1px solid #d8e6df;
+    padding:16px 12px; text-align:center;
+  }
+  .day2 .stop .timecol{background:#f2e7db; border-right-color:#e6d3bf;}
+  .timecol .arr{font-size:27px; font-weight:900; color:var(--green-d); font-family:"Noto Serif TC",serif; line-height:1.1;}
+  .day2 .timecol .arr{color:#6f4526;}
+  .timecol .lbl{font-size:13px; color:var(--muted); letter-spacing:.12em;}
+  .timecol .stay{margin-top:9px; font-size:13.5px; font-weight:800; color:var(--terra);
+    background:var(--terra-l); border-radius:20px; padding:3px 10px; display:inline-block;}
+  .timecol .dep{margin-top:9px; font-size:14px; color:var(--muted);}
+  .timecol .dep b{color:var(--ink);}
+
+  .stop .body{flex:1 1 320px; min-width:260px; padding:15px 18px;}
+  .stop .body .name{font-family:"Noto Serif TC",serif; font-size:23px; font-weight:800; color:var(--ink);
+    display:flex; align-items:center; gap:9px; flex-wrap:wrap; line-height:1.3;}
+  .tag{font-size:13px; font-weight:700; padding:3px 11px; border-radius:20px; letter-spacing:.05em;}
+  .tag.spot{background:var(--green-l); color:var(--green-d);}
+  .tag.food{background:var(--terra-l); color:#a4452a;}
+  .tag.nat{background:var(--rose-l); color:#a24a5e;}
+  .tag.stay{background:var(--gold-l); color:#8a6a1f;}
+  .tag.trans{background:#e6e9ef; color:#4a5568;}
+  .zone{font-size:14px; color:var(--muted); font-weight:600;}
+
+  .info{list-style:none; margin:12px 0 0; padding:0; font-size:16px;}
+  .info li{padding:4px 0 4px 26px; position:relative; line-height:1.65;}
+  .info li .i{position:absolute; left:0; top:4px; font-size:16px;}
+  .desc{margin:12px 0 2px; font-size:16px; color:#4b463e; line-height:1.75;}
+  .subspot{margin-top:11px; padding:12px 14px; background:#faf7f1; border:1px solid var(--line);
+    border-radius:10px; font-size:15.5px; line-height:1.7;}
+  .subspot .st{font-weight:800; color:var(--green-d); margin-bottom:4px; font-size:16.5px;}
+
+  .gallery{display:flex; gap:9px; padding:0 15px 15px;}
+  .gallery img{flex:1 1 0; min-width:0; width:100%; height:auto; display:block;
+    border-radius:10px; border:1px solid var(--line);}
+  .gallery.solo img{flex:0 1 auto; max-width:520px; margin:0 auto;}
+
+  .routewrap{padding:2px 15px 16px;}
+  .roadnote{background:#fff4e6; border:1px solid #f0c88a; border-left:6px solid #d1791f;
+    border-radius:10px; padding:13px 15px; font-size:16px; line-height:1.75; margin-bottom:11px;}
+  .roadnote .t{font-weight:800; color:#b5661a; display:block; margin-bottom:3px;}
+  .roadnote b{color:#b5661a;}
+  .roadnote .no{color:#c0392b; font-weight:800;}
+  .routewrap img{width:100%; border-radius:10px; border:1px solid var(--line); display:block;}
+
+  .pill-links{margin-top:13px; display:flex; gap:9px; flex-wrap:wrap; align-items:center;}
+  .pill-links a{font-size:15.5px; font-weight:800; padding:10px 16px; border-radius:22px;
+    background:#2f6fb3; color:#fff; border:1px solid #285f9c;}
+  .pill-links a.ghost{background:#2f7d5f; color:#fff; border:1px solid #276a50;}
+  .pill-links a.park{background:#d1791f; color:#fff; border:1px solid #b5661a;}
+  .pill-links a:hover{text-decoration:none; opacity:.92;}
+  .pill-links .warn{font-size:14.5px; font-weight:800; color:#b5661a;}
+
+  .footer{margin-top:30px; padding-top:18px; border-top:1px solid var(--line);
+    font-size:12.5px; color:var(--muted); text-align:center; line-height:1.7;}
+  .backup{background:#fff8ee; border:1px dashed var(--gold); border-radius:12px;
+    padding:12px 16px; margin-top:20px; font-size:13px; color:#7a5f1f;}
+  .backup b{color:#8a6a1f;}
+
+  @media print{
+    body{background:#fff; font-size:14px;}
+    .wrap{max-width:none; padding:0;}
+    @page{size:A4; margin:12mm;}
+    .cover{border-radius:16px;}
+    .day-break{break-before:page; page-break-before:always;}
+    .dayhead, .mapfig, .panel, .stop{break-inside:avoid; page-break-inside:avoid;}
+  }
+  @media (max-width:560px){
+    .cover h1{font-size:34px;}
+    .stop .timecol{flex-basis:100%; border-right:none; border-bottom:1px solid #d8e6df; display:flex;
+      gap:14px; align-items:center; justify-content:center; padding:12px;}
+    .timecol .stay,.timecol .dep{margin-top:0;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="cover">
+  <div class="eyebrow">TAIPEI &rarr; SANYI &rarr; TAICHUNG · 1 DAY</div>
+  <h1>三義・台中　長輩慢遊一日</h1>
+  <div class="sub">無障礙好走 × 蔬食養生 × 室內看展 — 平順不趕的順路一日</div>
+  <div class="route"><span class="node">台北出發</span><span class="arw">&rarr;</span><span class="node">三義木雕博物館</span><span class="arw">&rarr;</span><span class="node">卓也小屋 午餐</span><span class="arw">&rarr;</span><span class="node">台中國家歌劇院</span><span class="arw">&rarr;</span><span class="node">台中西區</span></div>
+  <div class="meta"><div class="chip"><b>日期</b>一日遊 · 08:00 台北出發</div><div class="chip"><b>同行</b>4 位大人（含 70 歲長輩，需平坦好走）</div><div class="chip"><b>步調</b>單趟車程短、景點平緩、午餐好停留</div></div>
+</header>
+
+<section class="panel">
+  <h2><span class="ic">🎒</span>行前提醒　天氣 &amp; 攜帶工具</h2>
+  <div class="two">
+    <div><div style="font-weight:800;color:var(--green-d);margin-bottom:6px;">出發前先看天氣</div><div class="weatherbtns"><a class="wbtn" href="https://www.google.com/search?q=苗栗三義+一週天氣預報" target="_blank">苗栗 天氣<small>點我看一週預報</small></a><a class="wbtn c2" href="https://www.google.com/search?q=台中市+一週天氣預報" target="_blank">台中 天氣<small>點我看一週預報</small></a></div><p class="note">10 月早晚溫差大、日間舒適，帶件薄外套；山區午後偶有短暫陣雨，備把折傘。</p></div>
+    <div><div style="font-weight:800;color:var(--green-d);margin-bottom:6px;">建議攜帶</div><ul class="wlist"><li>好走的鞋（走平面步道即可，避免長時間站立）</li><li>薄外套（早晚與室內冷氣溫差）</li><li>帽子・水壺・常備藥・健保卡</li><li>折傘 / 輕便雨衣（山區午後陣雨）</li><li>現金零錢（停車、園區折抵）</li></ul></div>
+  </div>
+</section>
+
+<section class="day"><div class="dayhead"><span class="d">Day 1</span><span class="dt">一日遊　台北 → 三義 → 台中</span><span class="rt">苗栗三義 → 台中西區</span></div><figure class="mapfig"><div class="pill-links"><a href="https://www.google.com/maps/dir/?api=1&amp;origin=台北車站&amp;destination=臺中國家歌劇院&amp;waypoints=三義木雕博物館|卓也小屋&amp;travelmode=driving" target="_blank">🗺 在 Google Maps 開啟本日路線</a></div><figcaption><b>本日路線（單向不折返）</b>：台北 → 國道1／國道3 南下 → 三義 → 台中西區。全程順著高速公路一路向南，回程再由台中上國道北返。點按鈕可直接在 Google Maps 開啟導航路線。</figcaption></figure><div class="timeline"><article class="stop"><div class="top"><div class="timecol"><div class="lbl">出發</div><div class="arr">08:00</div></div><div class="body"><div class="name">台北出發 <span class="tag trans">交通・集合</span> <span class="zone">台北</span></div><ul class="info"><li><span class="i">🚗</span>會合後上國道南下；車程較長，中途可停休息站</li></ul><div class="pill-links"><a href="https://www.google.com/maps/search/?api=1&amp;query=台北車站" target="_blank">🗺 Google Map</a></div></div></div></article>
+<div class="leg"><span class="hr"></span><span class="car">🚗 約 1 小時 40 分</span><span class="rd">國道1 → 國道3 南下（中途可停西湖服務區上廁所、伸展）</span><span class="hr"></span></div>
+<article class="stop"><div class="top"><div class="timecol"><div class="lbl">到達</div><div class="arr">09:50</div><div class="stay">停留 1.5 小時</div><div class="dep">出發 <b>11:20</b></div></div><div class="body"><div class="name">三義木雕博物館 <span class="tag spot">文化景點・無障礙</span> <span class="zone">三義鄉</span></div><ul class="info"><li><span class="i">📍</span>367 苗栗縣三義鄉廣盛村廣聲新城88號</li><li><span class="i">☎</span>037-876009</li><li><span class="i">🕘</span>09:00–17:00（16:30 停止入館・週一休）</li></ul><p class="desc">全台唯一以木雕為主題的公立博物館，<b>室內平面看展、動線便於輪椅與手推車、設無障礙廁所與停車場</b>，對長輩最友善。慢慢看不趕、冷氣舒適。</p><div class="pill-links"><a href="https://www.google.com/maps/search/?api=1&amp;query=三義木雕博物館" target="_blank">🗺 Google Map</a><a href="https://www.google.com/maps/search/?api=1&amp;query=三義木雕博物館+停車場" target="_blank" class="park">🅿️ 停車場</a><a href="https://wood.mlc.gov.tw/" target="_blank" class="ghost">🔗 官方網站</a></div></div></div></article>
+<div class="leg"><span class="hr"></span><span class="car">🚗 約 10 分</span><span class="rd">台13 → 鄉道往雙潭</span><span class="hr"></span></div>
+<article class="stop"><div class="top"><div class="timecol"><div class="lbl">午餐到達</div><div class="arr">11:30</div><div class="stay">停留 1.5 小時</div><div class="dep">出發 <b>13:00</b></div></div><div class="body"><div class="name">卓也小屋 <span class="tag food">午餐・蔬食園區</span> <span class="zone">三義鄉</span></div><ul class="info"><li><span class="i">📍</span>苗栗縣三義鄉雙潭村崩山下1-5號（餐廳 1-9號）</li><li><span class="i">☎</span>03-787-9198</li><li><span class="i">🕘</span>園區 09:00–17:30；蔬食午餐約 11:00–14:00</li></ul><p class="desc">山林間的蔬食園區，<b>創意蔬食自助饗宴／養生鍋</b>，園區步道平緩、綠意舒服，適合長輩飯後散步。入園票約 200 元可折抵消費。建議先訂位。</p><div class="pill-links"><a href="https://www.google.com/maps/search/?api=1&amp;query=卓也小屋+三義" target="_blank">🗺 Google Map</a><a href="https://www.joye.com.tw/" target="_blank" class="ghost">🔗 官方網站</a></div></div></div></article>
+<div class="leg"><span class="hr"></span><span class="car">🚗 約 40 分</span><span class="rd">國道1 南下 → 台中西屯</span><span class="hr"></span></div>
+<article class="stop"><div class="top"><div class="timecol"><div class="lbl">到達</div><div class="arr">13:40</div><div class="stay">停留 2 小時</div><div class="dep">出發 <b>15:40</b></div></div><div class="body"><div class="name">臺中國家歌劇院 <span class="tag spot">建築・室內平面</span> <span class="zone">台中・西屯</span></div><ul class="info"><li><span class="i">📍</span>臺中市西屯區惠來路二段101號</li><li><span class="i">☎</span>04-2251-5041</li><li><span class="i">🕘</span>11:30–21:00（週一休）</li></ul><p class="desc">伊東豊雄設計的「美聲涵洞」曲牆建築，<b>室內平面、有電梯、冷氣舒適</b>，長輩可慢逛書店、餐飲與展覽。B1 停車場含 6 席無障礙車位，持票觀眾 5 小時 100 元。</p><div class="pill-links"><a href="https://www.google.com/maps/search/?api=1&amp;query=臺中國家歌劇院" target="_blank">🗺 Google Map</a><a href="https://www.google.com/maps/search/?api=1&amp;query=臺中國家歌劇院+停車場" target="_blank" class="park">🅿️ 停車場</a><a href="https://www.npac-ntt.org/" target="_blank" class="ghost">🔗 官方網站</a></div></div></div></article>
+<div class="leg"><span class="hr"></span><span class="car">🚗 回程</span><span class="rd">台中西區 → 國道1 北返台北</span><span class="hr"></span></div>
+<article class="stop"><div class="top"><div class="timecol"><div class="lbl">賦歸</div><div class="arr">15:40</div><div class="stay">回程</div></div><div class="body"><div class="name">台中西區・賦歸 <span class="tag trans">交通・賦歸</span> <span class="zone">台中・西區</span></div><ul class="info"><li><span class="i">🚗</span>避開下班尖峰，早些上國道北返較順</li></ul></div></div></article>
+</div><div class="backup">🅿️ <b>備案</b>：若長輩想多休息，午餐後可改去 <b>台中中央書局／勤美綠園道</b>（皆平面、好停車），把歌劇院留到下次。</div></section>
+
+<div class="footer">行程時間為預估，實際依當日交通與長輩體力彈性調整；營業時間與訂位請出發前再次確認。</div>
+</div>
+</body>
+</html>
