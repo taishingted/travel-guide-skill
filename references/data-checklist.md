@@ -21,6 +21,7 @@ Two kinds: **the user must supply**, and **you fill in**. Don't leave gaps.
 - `name`, `zone` (area/district), `tag` (`cls`: spot / food / nat / stay / trans, plus `text`)
 - `arr`, `lbl` (time label: Arrive / Lunch / Start / Check-in …), `stay` (optional), `dep` (optional)
 - `photos`: array of photo ids, e.g. `["2-1","2-2"]` (**stop-seq**; pasted images can't be read — they must be saved as files)
+- `geo`: `[lng, lat]` in decimal degrees, **lng first** (WGS84). Powers `make_route_map.py` (numbered pins + arrows). Look the coords up when you verify the address; a stop with no `geo` is just skipped on the map. A day may also carry its own `geo` = the point that represents it on the overview map (else the mean of its stops is used).
 
 ### Between stops (`items` with type=leg)
 - `time` (e.g. "~27 min"), `road` (which road, e.g. "JR Nara Line → Inari"), `icon` (optional 🚗 🚆 🚌 🚶)

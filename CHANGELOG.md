@@ -2,6 +2,24 @@
 
 All notable changes to this project. Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [v2.4.0] - 2026-09-16
+
+**Route maps you can read at a glance** — see the one-way flow and where each stop sits.
+
+### Added
+- `scripts/make_route_map.py` — auto-draws route maps from `trip.json`: a real OSM basemap with
+  **numbered pins in visiting order joined by direction arrows**. Writes `assets/map_dayN.png` (per day,
+  pin color follows the day theme) and `assets/map_overview.png` (one pin per day across the whole region).
+- New `"geo": [lng, lat]` field on stops (and optionally days) drives the maps — documented in
+  `references/data-checklist.md`. Stops without `geo` are simply skipped; needs internet at build time,
+  and degrades gracefully (map skipped, guide still builds) if tiles/staticmap are unavailable.
+- SKILL step **2b** documents the map step; `staticmap` added to `check_env.py` + `requirements.txt`.
+
+### Changed
+- Step 5 (Deliver): when a GitHub Pages host is set up, publish to **both** and give **both** links —
+  the Artifact URL (instant, on the user's account) and the GitHub Pages URL (permanent, user-owned,
+  no-login, best for LINE). Locked the "never share the raw .html file" rule in harder.
+
 ## [v2.3.0] - 2026-09-16
 
 **Deliver a shareable link, not just a file.**

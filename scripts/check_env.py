@@ -7,7 +7,8 @@ Usage:
   python check_env.py --check    # check only, don't install
 
 Everything degrades gracefully — nothing here is fatal:
-  Pillow      -> process_images.py (auto-crop photos). No photos? not needed.
+  Pillow      -> process_images.py (auto-crop photos) + make_route_map.py (draw pins/arrows). No photos/maps? not needed.
+  staticmap   -> make_route_map.py (real OSM basemap for the route maps). Missing/offline? maps are skipped.
   PyMuPDF     -> verify_pdf.py (auto-check the printed PDF). Missing? eyeball it in a browser.
   Edge/Chrome -> make_pdf.py (print the A4 PDF). Missing? open the HTML and Print > Save as PDF.
   build_html.py needs only the Python standard library, so the guide itself ALWAYS builds.
@@ -50,7 +51,7 @@ def main():
     do_install = "--check" not in sys.argv
     print("Python:", sys.version.split()[0])
     ok = True
-    for mod, pkg in [("PIL", "Pillow"), ("pymupdf", "PyMuPDF")]:
+    for mod, pkg in [("PIL", "Pillow"), ("pymupdf", "PyMuPDF"), ("staticmap", "staticmap")]:
         if have(mod):
             print("  [ok] %s" % pkg)
             continue

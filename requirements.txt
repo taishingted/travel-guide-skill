@@ -2,4 +2,5 @@
 # Install with:  pip install -r requirements.txt   (or run: python scripts/check_env.py)
 Pillow>=9        # process_images.py — auto-crop photos to 3:2
 PyMuPDF>=1.23    # verify_pdf.py — render PDF pages & auto-flag shrunk photos
+staticmap>=0.5    # make_route_map.py — real OSM basemap for route maps (numbered pins + arrows); needs internet
 # Also needs a browser (Edge or Chrome) for make_pdf.py; if absent, print from a browser instead.

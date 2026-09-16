@@ -31,6 +31,8 @@ phone / hours can't be confirmed, write "please verify".
 Fill the schema (see `references/example-trip.json`, and `references/example-trip.zh-TW.json` for a localized
 one). Set `lang` + `labels` for the output language. In PLAN mode this is the confirmed plan expanded into
 full detail; in POLISH mode it's the user's given stops plus the facts you look up.
+Add a `"geo": [lng, lat]` to each stop (and optionally each day) so step 2b can draw the route maps —
+see `references/data-checklist.md`.
 
 ## 2. Photos → `scripts/process_images.py`
 Pasted-in-chat images can't be read — have the user save photos into `photos/` named **`stop-seq`**
@@ -40,6 +42,21 @@ confirmed.
 ```
 python scripts/process_images.py photos assets
 ```
+
+## 2b. Route maps (numbered pins + direction arrows) → `scripts/make_route_map.py`
+A "tap to open Google Maps" button doesn't show, at a glance, that the trip runs **one-way** and where
+each stop sits **locally**. This draws that picture: a real OSM basemap with **numbered pins in visiting
+order** joined by **arrows**. It reads the `geo` coords from `trip.json` and writes:
+- `assets/map_dayN.png` — that day's stops, pinned 1,2,3… and arrowed (pin color follows the day theme).
+- `assets/map_overview.png` — one pin per day across the whole region, arrowed in day order (the corridor).
+```
+python scripts/make_route_map.py trip.json assets
+```
+Then point each day's `map.img` at the image and keep the tappable route link inside the caption, e.g.
+`"map": { "img": "map_day2", "caption": "…<br>🗺 <a href='https://www.google.com/maps/dir/…'>本日路線</a>" }`.
+Put `map_overview` on Day 1 (the departure day) as a whole-trip orientation. Needs internet at build time
+(tiles); if it can't fetch, it skips the map with a hint and the guide still builds. A user-supplied
+`map_dayN.png` screenshot still wins if present (V1 behavior) — this only fills the gap when there isn't one.
 
 ## 3. Build HTML → `scripts/build_html.py`
 ```
@@ -54,17 +71,30 @@ python scripts/verify_pdf.py guide.pdf
 ```
 If `verify_pdf.py` flags a page, see `references/gotchas.md` #2: ask the user to re-save that one image, then redo step 2.
 
-## 5. Deliver — give a LINK they can share, not just a file
-A bare `.html` file card has no Share button and is awkward to forward — a "the file looks fine but I
-can't share it" complaint means you stopped one step short. Publishing beats handing over a file. In
-order of preference:
-1. **If you can publish a hosted page / Artifact** (e.g. the Claude Artifact tool): publish the
-   **self-contained** `guide.html` and give the user its **share link** — it opens on any phone with one
-   tap and forwards cleanly (LINE/WhatsApp). Re-publish to the **same URL** on later edits so the link
-   the user already sent keeps working (mobile-cache caveat: `gotchas.md` #5).
-2. **Otherwise** hand over the self-contained HTML file, and point them at GitHub Pages / a hosted option
-   for a real shareable link (`gotchas.md` #5).
-Always also give the **PDF** for printing/offline. Walk through `references/gotchas.md` once before delivering.
+## 5. Deliver — a tappable LINK is THE deliverable (do NOT hand over the HTML file to share)
+**This is fixed, not a preference.** An HTML file sent as an attachment (Claude file card, email, and
+especially **LINE / WhatsApp**) does **not** open inline — the phone treats it as a download, sometimes
+wrapped in a **zip**, and the recipient can't just tap it. Every "it came as a zip / won't open in LINE"
+complaint is this mistake. So:
+
+1. **Publish the self-contained `guide.html` as a hosted page / Artifact and give the user the URL.** That
+   link opens on any phone with one tap and forwards cleanly through LINE/WhatsApp. This link **is** the
+   product — lead with it, paste it plainly.
+2. **Re-publish to the SAME URL** on every later edit, so a link the user already forwarded keeps working
+   (mobile-cache caveat: `gotchas.md` #5). Never announce a new URL for an edit of the same trip.
+3. **Tell the user how to make it forwardable:** an Artifact is **private by default** — they must open the
+   page's **Share** menu and turn on the public/shareable link once, then anyone they send it to can open it
+   (no login). If they need a permanent public link they own, offer **GitHub Pages** (`gotchas.md` #5).
+4. **Do NOT push the raw `.html` file as the way to share.** Only offer a file for one reason: the **PDF**,
+   for printing / offline. If there is genuinely no way to publish a link in this environment, say so
+   explicitly, hand over the HTML file, and give the GitHub Pages steps — don't silently fall back to a file.
+5. **When a GitHub Pages host is set up, publish to BOTH and give BOTH links:** the **Artifact** URL (instant,
+   lives on the user's Claude account, easy for you to re-edit) *and* the **GitHub Pages** URL (permanent,
+   user-owned, opens for anyone with no login — the best link to forward in LINE). One repo, one folder per
+   trip holding `index.html`, so the URL is clean (`…/travel-guides/<trip>/`); re-push the same folder to keep
+   the same URL. Commit with the user's GitHub **noreply** email (a real email trips GitHub's push privacy block).
+
+Walk through `references/gotchas.md` once before delivering.
 
 ## Follow the design system, and always test
 Layout/colors/components are fixed in `references/design-system.md` (CSS in `assets/template.html`) — don't
