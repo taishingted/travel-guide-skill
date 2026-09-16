@@ -2,6 +2,18 @@
 
 All notable changes to this project. Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [v2.1.0] - 2026-09-16
+
+**Global coverage.**
+
+### Added
+- **Automatic fonts & text direction by language.** `build_html.py` picks the matching Noto font from
+  `trip.json` `lang` — Latin/European, zh-Hant, zh-Hans, ja, ko, th, ar, he — and sets `dir="rtl"` for
+  Arabic/Hebrew. Any language renders; add one line to `FONT_PROFILES` for a new script.
+- **China map fallback** (Google Maps is blocked there): tested name-based links — Amap
+  `amap.com/search?query=…` / Baidu `map.baidu.com/search/…` per stop.
+- Weather localized to the destination country; descriptions sourced from local-language sites.
+
 ## [v2.0.0] - 2026-09-16
 
 **V2 — plan from 3 inputs.** The skill can now plan the trip, not just format it.

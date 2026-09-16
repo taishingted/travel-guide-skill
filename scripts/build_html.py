@@ -27,6 +27,44 @@ DEFAULT_LABELS = {
     "footer": "Times are estimates &mdash; adjust on the day for traffic and conditions. Please re-check opening hours before you go.",
 }
 
+# lang -> (script font families to load, sans primary, serif primary, rtl)
+FONT_PROFILES = {
+    "zh-hant": (["Noto Sans TC", "Noto Serif TC"], '"Noto Sans TC"', '"Noto Serif TC"', False),
+    "zh-hans": (["Noto Sans SC", "Noto Serif SC"], '"Noto Sans SC"', '"Noto Serif SC"', False),
+    "ja":      (["Noto Sans JP", "Noto Serif JP"], '"Noto Sans JP"', '"Noto Serif JP"', False),
+    "ko":      (["Noto Sans KR", "Noto Serif KR"], '"Noto Sans KR"', '"Noto Serif KR"', False),
+    "th":      (["Noto Sans Thai", "Noto Serif Thai"], '"Noto Sans Thai"', '"Noto Serif Thai"', False),
+    "ar":      (["Noto Sans Arabic", "Noto Naskh Arabic"], '"Noto Sans Arabic"', '"Noto Naskh Arabic"', True),
+    "he":      (["Noto Sans Hebrew", "Noto Serif Hebrew"], '"Noto Sans Hebrew"', '"Noto Serif Hebrew"', True),
+}
+
+def _norm_lang(lang):
+    l = (lang or "en").lower().replace("_", "-")
+    if l.startswith("zh"):
+        return "zh-hans" if any(x in l for x in ("hans", "cn", "sg")) else "zh-hant"
+    return l.split("-")[0]
+
+def font_setup(lang):
+    """Pick Google-Fonts <link>, font-family stacks and text direction from the output language."""
+    prof = FONT_PROFILES.get(_norm_lang(lang))
+    fams = ["Noto Sans", "Noto Serif"]            # Latin base (numbers / latin names) always loaded
+    if prof:
+        fams += prof[0]
+    parts = []
+    for f in fams:
+        w = "wght@600;700;900" if "Serif" in f else "wght@400;500;700;900"
+        parts.append("family=%s:%s" % (f.replace(" ", "+"), w))
+    link = '<link href="https://fonts.googleapis.com/css2?%s&display=swap" rel="stylesheet">' % "&".join(parts)
+    if prof:
+        sans = '%s,"Noto Sans","Microsoft JhengHei",system-ui,sans-serif' % prof[1]
+        serif = '%s,"Noto Serif","Georgia",serif' % prof[2]
+        rtl = prof[3]
+    else:
+        sans = '"Noto Sans","Microsoft JhengHei",system-ui,sans-serif'
+        serif = '"Noto Serif","Georgia",serif'
+        rtl = False
+    return link, sans, serif, ("rtl" if rtl else "ltr")
+
 def esc(s):
     return html.escape(str(s), quote=False)
 
@@ -196,8 +234,13 @@ def main():
     tpl_path = os.path.join(os.path.dirname(__file__), "..", "assets", "template.html")
     tpl = open(tpl_path, encoding="utf-8").read()
     content = Builder(assets, embed, trip.get("labels")).build(trip)
+    font_link, font_sans, font_serif, text_dir = font_setup(trip.get("lang", "en"))
     html_out = (tpl.replace("%%TITLE%%", esc(trip.get("title", "Travel Guide")))
                    .replace("%%LANG%%", esc(trip.get("lang", "en")))
+                   .replace("%%DIR%%", text_dir)
+                   .replace("%%FONT_LINK%%", font_link)
+                   .replace("%%FONT_SANS%%", font_sans)
+                   .replace("%%FONT_SERIF%%", font_serif)
                    .replace("<!--CONTENT-->", content))
     open(out, "w", encoding="utf-8").write(html_out)
     print("OK -> %s (%.2f MB, embed=%s)" % (out, len(html_out.encode()) / 1048576, embed))

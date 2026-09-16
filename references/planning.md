@@ -66,8 +66,11 @@ drop a screenshot named `map_dayN.png` later to add a visual map (V1 behavior).
 
 The planning logic, rendering, and links are built to work worldwide. Adapt these per destination country:
 
-- **Maps** — a Google Maps directions link works **worldwide except mainland China**. In China, use a local
-  map instead (Amap 高德地图 / Baidu 百度地图) for both the day route link and per-stop map links.
+- **Maps** — a Google Maps link works **worldwide except mainland China**. In China, use a local map
+  (name-based links, tested working):
+  - per stop → Amap `https://www.amap.com/search?query=<name>` or Baidu `https://map.baidu.com/search/<name>`
+  - the day route → an Amap search of the area (a true multi-point directions link needs an API key on
+    Amap/Baidu, so skip it in China and let the per-stop links + the leg descriptions carry the route).
 - **Weather** — link to the **destination country's** forecast, not a fixed Taiwan source.
   `https://www.google.com/search?q=<city>+weather+forecast` auto-localizes and works everywhere **except
   China**; you may instead point at the national service where it's better known (e.g. JMA / tenki.jp in
@@ -80,10 +83,10 @@ The planning logic, rendering, and links are built to work worldwide. Adapt thes
 - **Roads** — describe roads in the **local** vocabulary (Interstate / A-road / autoroute / 高速 / 국도),
   not Taiwan's 國道/縣道.
 - **Currency & units** — use the local currency and units in prices/notes.
-- **Output script & fonts** — `template.html`'s font stack covers Latin + Traditional Chinese. If the
-  output language uses another script (Japanese kana, Korean, Thai, Arabic, Cyrillic, Devanagari…), add the
-  matching Noto font to the Google-Fonts `<link>` in `assets/template.html`, and set `dir="rtl"` for
-  right-to-left languages.
+- **Output script & fonts (automatic)** — `build_html.py` picks the right Noto font and text direction
+  from `trip.json` `lang`: en/European → Noto Sans/Serif; zh-Hant/zh-Hans, ja, ko, th, ar (RTL), he (RTL)
+  each load their matching Noto font, and Arabic/Hebrew set `dir="rtl"` automatically. Just set `lang`
+  correctly. To support a script not yet listed, add one line to `FONT_PROFILES` in `build_html.py`.
 
 ## Don't take these shortcuts (block them)
 

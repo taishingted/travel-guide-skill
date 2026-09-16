@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="%%LANG%%">
+<html lang="%%LANG%%" dir="%%DIR%%">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>%%TITLE%%</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700;900&family=Noto+Serif:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
+%%FONT_LINK%%
 <style>
   :root{
     --green:#2f5d50; --green-d:#234a40; --green-l:#e8f0ec;
@@ -15,16 +15,18 @@
     --rose:#c56b7e; --rose-l:#f6e6ea;
     --ink:#332f29; --muted:#7c746a; --line:#e6ddcf;
     --cream:#faf6ee; --card:#ffffff;
+    --font-sans:%%FONT_SANS%%;
+    --font-serif:%%FONT_SERIF%%;
   }
   *{box-sizing:border-box;}
   html{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
   body{
     margin:0; background:var(--cream); color:var(--ink);
-    font-family:"Noto Sans","Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif;
+    font-family:var(--font-sans);
     font-size:17.5px; line-height:1.78;
   }
   .wrap{max-width:820px; margin:0 auto; padding:26px 22px 60px;}
-  h1,h2,h3,.serif{font-family:"Noto Serif","Noto Serif TC","Microsoft JhengHei","Georgia",serif;}
+  h1,h2,h3,.serif{font-family:var(--font-serif);}
   a{color:var(--green); text-decoration:none;}
   a:hover{text-decoration:underline;}
 
