@@ -14,9 +14,14 @@ A flagged page -> open its PNG to confirm; if it really shrank -> ask the user t
 source photo once (Save As) and rerun process_images / build_html / make_pdf.
 """
 import sys, os
-import pymupdf
 try: sys.stdout.reconfigure(encoding="utf-8")
 except Exception: pass
+try:
+    import pymupdf
+except Exception:
+    print("This step needs PyMuPDF.  Install:  pip install PyMuPDF")
+    print("(Skipping auto-verify — open the PDF/HTML in a browser to eyeball the photos.)")
+    sys.exit(0)
 try:
     from PIL import Image
     HAVE_PIL = True

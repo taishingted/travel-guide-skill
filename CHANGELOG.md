@@ -2,6 +2,19 @@
 
 All notable changes to this project. Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [v2.2.0] - 2026-09-16
+
+**Portable & self-healing** — runs on a fresh machine without dying.
+
+### Added
+- `scripts/check_env.py` — checks and **auto-installs** Pillow + PyMuPDF, and detects a browser.
+- `requirements.txt`; a "Setup on a fresh machine" section in README and SKILL.
+
+### Changed
+- **Graceful degradation everywhere**: `build_html.py` needs only the standard library (the guide always
+  builds); `process_images.py` and `verify_pdf.py` now exit with a one-line install hint instead of
+  crashing when Pillow / PyMuPDF are missing; `make_pdf.py` already falls back to browser printing.
+
 ## [v2.1.0] - 2026-09-16
 
 **Global coverage.**

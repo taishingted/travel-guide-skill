@@ -11,9 +11,14 @@ Why pre-crop to 3:2: side-by-side photos with the same ratio auto-align to equal
 page can use plain width:100% and avoid object-fit (which headless PDF export mishandles).
 """
 import sys, os, re, glob
-from PIL import Image
 try: sys.stdout.reconfigure(encoding="utf-8")
 except Exception: pass
+try:
+    from PIL import Image
+except Exception:
+    print("This step needs Pillow.  Install:  pip install Pillow")
+    print("(If you have no photos, you can skip this step — build_html works without images.)")
+    sys.exit(0)
 
 TARGET = 3 / 2  # 3:2
 

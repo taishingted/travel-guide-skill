@@ -9,6 +9,12 @@ Produce a polished, information-rich, **shareable** travel guide: a **self-conta
 with one tap) **plus** an **A4 PDF** for proofing. Reply in the user's language, plain words, semi-automatic
 (show a short plan first, then build).
 
+## Setup (first run on a new machine)
+Run `python scripts/check_env.py` — it auto-installs Pillow + PyMuPDF if missing and checks for a browser.
+Everything degrades gracefully: the guide **always builds with pure Python**; the PDF step falls back to
+"print from a browser" if there's no Edge/Chrome; auto-verify is skipped if PyMuPDF is absent. So it won't
+"die" on a blank machine — worst case a helper step is skipped with a one-line hint.
+
 ## Which door? (pick at the start)
 
 - **The user gave only rough inputs** — dates, a start→end area, and who's going → **PLAN mode**: do step 0

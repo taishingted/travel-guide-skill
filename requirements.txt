@@ -1,0 +1,5 @@
+# Optional helpers — the core (build_html.py) runs on the Python standard library alone.
+# Install with:  pip install -r requirements.txt   (or run: python scripts/check_env.py)
+Pillow>=9        # process_images.py — auto-crop photos to 3:2
+PyMuPDF>=1.23    # verify_pdf.py — render PDF pages & auto-flag shrunk photos
+# Also needs a browser (Edge or Chrome) for make_pdf.py; if absent, print from a browser instead.

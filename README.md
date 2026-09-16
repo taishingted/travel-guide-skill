@@ -68,7 +68,15 @@ python scripts/make_pdf.py guide_files.html guide.pdf
 python scripts/verify_pdf.py guide.pdf
 ```
 
-**Requirements**: Python 3, [Pillow](https://pypi.org/project/pillow/), [PyMuPDF](https://pypi.org/project/PyMuPDF/), system Edge or Chrome (headless PDF).
+### Setup on a fresh machine
+```bash
+python scripts/check_env.py     # auto-installs Pillow + PyMuPDF if missing; checks for a browser
+```
+**Requirements** are all optional and degrade gracefully — it won't die on a blank machine:
+- **Python 3** (standard library only) → `build_html.py` always builds the guide.
+- **[Pillow](https://pypi.org/project/pillow/)** → auto-crops photos (`process_images.py`); skip if you have no photos.
+- **[PyMuPDF](https://pypi.org/project/PyMuPDF/)** → auto-verifies the PDF (`verify_pdf.py`); without it, eyeball the PDF in a browser.
+- **Edge / Chrome** → prints the A4 PDF (`make_pdf.py`); without it, open the HTML and Print → Save as PDF.
 
 ## 🧠 Gotchas (from `references/gotchas.md`)
 
